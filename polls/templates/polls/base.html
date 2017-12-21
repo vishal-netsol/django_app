@@ -1,0 +1,29 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load staticfiles %}
+
+<script src="{% static 'javascripts/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'javascripts/app.js' %}"></script>
+
+<body>
+    <div class="page-header">
+            <h4><a href="/polls">Questions</a></h4>
+            <h4><a class="pull-right" href="/logout">Logout</a></h4>
+            <br/>
+    </div>
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-12">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>

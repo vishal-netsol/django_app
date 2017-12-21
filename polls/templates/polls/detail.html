@@ -1,0 +1,14 @@
+{% extends 'polls/base.html' %}
+{% block content %}
+    <h3>{{ question.question_text }}</h3>
+    <ul>
+        {% for choice in question.choice_set.all %}
+            <li>{{ choice.choice_text }}</li>
+        {% endfor %}
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+{% endblock%}
