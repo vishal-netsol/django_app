@@ -5,7 +5,8 @@ import random
 REPO_URL = 'git@github.com:vishal-netsol/django_app.git'  
 
 def deploy():
-    site_folder = f'/home/{env.user}/sites/{env.host}'  
+    import pdb; pdb.set_trace()
+    site_folder = f'/home/{env.user}/sites/{env.host}' 
     run(f'mkdir -p {site_folder}')  
     with cd(site_folder):  
         _get_latest_source()
