@@ -9,6 +9,8 @@ def deploy():
     with cd('/Users/pardeepsaini/test'):
         _get_latest_source()
         _update_settings(env.host)
+        _update_virtualenv()
+        
 
 
 # def deploy():
@@ -31,8 +33,11 @@ def _get_latest_source():
             if run("test -d %s" % code_dir).failed:
                 run("git clone %s" % REPO_URL)
         with cd(code_dir):
+            run("git stash")
             run("git pull")
             run("touch app.wsgi")
+    # current_commit = local("git log -n 1 --format=%H", capture=True)  
+    # run('git reset --hard %s' % current_commit)
 
 def _update_settings(site_name):
     settings_path = '/Users/pardeepsaini/test/django_app/blog/settings.py'
@@ -45,13 +50,17 @@ def _update_settings(site_name):
     if not exists(secret_key_file):  
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
         key = ''.join(random.choice(chars) for _ in range(50))
-        append(secret_key_file, 'SECRET_KEY = "%s" % key')
+        append(secret_key_file, 'SECRET_KEY = {}'.format(key))
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
-# def _update_virtualenv():
-#     if not exists('virtualenv/bin/pip'):  
-#         run(f'python3.5 -m venv virtualenv')
-#     run('./virtualenv/bin/pip install -r requirements.txt')
+def _update_virtualenv():
+    if not exists('virtualenv/bin/pip'):
+        run('sudo easy_install pip')
+        run('sudo pip install virtualenv')
+        # run('python -m virtualenv venv')
+        run('virtualenv web3_env')
+    run('source web3_env/bin/activate')
+    run('pip install -r django_app/requirements.txt')
 
 # def _update_static_files():
 #     run('./virtualenv/bin/python manage.py collectstatic --noinput')
