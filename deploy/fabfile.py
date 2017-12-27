@@ -1,5 +1,6 @@
 from fabric.contrib.files import append, exists, sed
 from fabric.api import cd, env, local, run, settings
+from contextlib import contextmanager as _contextmanager
 import random
 
 REPO_URL = 'git@github.com:vishal-netsol/django_app.git'
@@ -10,6 +11,8 @@ def deploy():
         _get_latest_source()
         _update_settings(env.host)
         _update_virtualenv()
+        _update_static_files()
+        _update_database()
         
 
 
@@ -41,29 +44,51 @@ def _get_latest_source():
 
 def _update_settings(site_name):
     settings_path = '/Users/pardeepsaini/test/django_app/blog/settings.py'
-    sed(settings_path, "DEBUG = True", "DEBUG = False")  
-    sed(settings_path,
-        'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = [" %s " % site_name]'  
-    )
+    # sed(settings_path, "DEBUG = True", "DEBUG = False")  
+    # sed(settings_path,
+    #     'ALLOWED_HOSTS =.+$',
+    #     'ALLOWED_HOSTS = [" %s " % site_name]'  
+    # )
     secret_key_file = '/Users/pardeepsaini/test/django_app/blog/secret_key.py'
     if not exists(secret_key_file):  
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
         key = ''.join(random.choice(chars) for _ in range(50))
-        append(secret_key_file, 'SECRET_KEY = {}'.format(key))
+        append(secret_key_file, 'SECRET_KEY = "{}"'.format(key))
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
 def _update_virtualenv():
     if not exists('virtualenv/bin/pip'):
-        run('sudo easy_install pip')
-        run('sudo pip install virtualenv')
+        #run('sudo easy_install pip')
+        run("brew install python3")
+        run('pip3 install virtualenv')
         # run('python -m virtualenv venv')
-        run('virtualenv web3_env')
-    run('source web3_env/bin/activate')
-    run('pip install -r django_app/requirements.txt')
+        run('virtualenv -p python3 web3_env')
+    # run('source web3_env/bin/activate')
+    run('source web3_env/bin/activate && pip3 install -r django_app/requirements.txt')
 
-# def _update_static_files():
-#     run('./virtualenv/bin/python manage.py collectstatic --noinput')
+def _update_static_files():
+    with cd('django_app'):
+        run('source ../web3_env/bin/activate && python manage.py collectstatic --noinput')
+
+
+# @_contextmanager
+# def virtualenv():
+#     with cd('/Users/pardeepsaini/test'):
+#         with prefix('web3_env/bin/activate'):
+#             yield
 
 # def _update_database():
-#     run('./virtualenv/bin/python manage.py migrate --noinput')
+#     with virtualenv():
+#         with cd('django_app'):
+#             run('python manage.py makemigrations --noinput')
+#             run('python manage.py migrate --noinput')
+
+# def _update_virtualenv():
+#     if not exists('virtualenv/bin/pip'):  
+#         run('python3.6 -m venv virtualenv')
+#     run('./virtualenv/bin/pip install -r django_app/requirements.txt')
+
+def _update_database():
+    with cd('django_app'):
+        run('source ../web3_env/bin/activate && python manage.py makemigrations --noinput')
+        run('source ../web3_env/bin/activate && python manage.py migrate --noinput')
