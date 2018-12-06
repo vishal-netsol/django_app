@@ -57,36 +57,16 @@ def _update_settings(site_name):
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
 def _update_virtualenv():
-    if not exists('virtualenv/bin/pip'):
-        #run('sudo easy_install pip')
+    if not exists('web3_env/bin/pip3'):
         run("brew install python3")
         run('pip3 install virtualenv')
-        # run('python -m virtualenv venv')
         run('virtualenv -p python3 web3_env')
-    # run('source web3_env/bin/activate')
     run('source web3_env/bin/activate && pip3 install -r django_app/requirements.txt')
 
 def _update_static_files():
     with cd('django_app'):
         run('source ../web3_env/bin/activate && python manage.py collectstatic --noinput')
 
-
-# @_contextmanager
-# def virtualenv():
-#     with cd('/Users/pardeepsaini/test'):
-#         with prefix('web3_env/bin/activate'):
-#             yield
-
-# def _update_database():
-#     with virtualenv():
-#         with cd('django_app'):
-#             run('python manage.py makemigrations --noinput')
-#             run('python manage.py migrate --noinput')
-
-# def _update_virtualenv():
-#     if not exists('virtualenv/bin/pip'):  
-#         run('python3.6 -m venv virtualenv')
-#     run('./virtualenv/bin/pip install -r django_app/requirements.txt')
 
 def _update_database():
     with cd('django_app'):

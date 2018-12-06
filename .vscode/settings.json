@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/usr/local/bin/python3"
+    "python.pythonPath": "/Users/vishal/apps/django/web3_env/bin/python",
+    "python.linting.pylintEnabled": false
 }

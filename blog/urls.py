@@ -24,10 +24,10 @@ from polls import views as poll_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
-    url(r'^accounts/login/$', auth_views.login, {'template_name': 'login/login.html'}, name="signin"),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/accounts/login'}),
+    url(r'^accounts/login/$', poll_views.SessionView.as_view(), name="signin"),
+    url(r'^logout/$', auth_views.logout, {'next_page': 'http://localhost:3000/user/login/'}),
     url(r'^register/$', poll_views.RegistrationView.as_view(), name='signup'),
-    url(r'^activate/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/account/$',
+    url(r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         poll_views.AccountActivationView.as_view(), name='activate'),
-    url(r'', auth_views.login, {'template_name': 'login/login.html'}),
+    url(r'^.*$', poll_views.NotFoundView.as_view(), name='not_found'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

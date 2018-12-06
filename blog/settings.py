@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '9s@+tgy)we+gl0^mso#q!huoj6%ze#g#!57_lvq2tjc7@45kx&'
+SECRET_KEY = '9s@+tgy)we+gl0^mso#q!huoj6%ze#g#!57_lvq2tjc7@45kx&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap3',
     'django_popup_view_field',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,11 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'public', 'static')
 
-LOGIN_REDIRECT_URL = '/polls'
+LOGIN_REDIRECT_URL = '/polls/'
+
+LOGIN_URL = 'http://localhost:3000/user/login/'
+
+AUTH_USER_MODEL = 'accounts.User'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
