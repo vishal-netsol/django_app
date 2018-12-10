@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
     url(r'^accounts/login/$', poll_views.SessionView.as_view(), name="signin"),
-    url(r'^logout/$', auth_views.logout, {'next_page': 'http://localhost:3000/user/login/'}),
+    url(r'^logout/$', poll_views.LogoutView.as_view(), name="logout"),
     url(r'^register/$', poll_views.RegistrationView.as_view(), name='signup'),
     url(r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         poll_views.AccountActivationView.as_view(), name='activate'),

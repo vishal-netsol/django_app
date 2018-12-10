@@ -15,5 +15,6 @@ urlpatterns = [
     path('<int:pk>/delete', views.DeletePoll.as_view(), name="delete_poll"),
     path('<int:pk>/edit', views.EditView.as_view(), name="edit_poll"),
     path('register', views.RegistrationView.as_view(), name="register"),
-    path('user_token/', views.UserTokenView.as_view(), name="user_token"),    
+    path('user_token/', views.UserTokenView.as_view(), name="user_token"),
+    path('generate_pdf/', views.GenerateReportView.as_view(), name="generate_pdf"),  
 ]

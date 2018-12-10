@@ -3,6 +3,7 @@
 {% block content %}
     <div>
         <a href="{% url 'polls:new_poll' %}" class="top-menu" style="float:right">New Question</a>
+        <a href="{% url 'polls:generate_pdf' %}" class="top-menu">Generate PDF</a>
     </div>
     <br />
     {% if latest_question_list %}
